@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Memory Game</title>
+	<link rel="stylesheet" type="text/css" href="./index.css">
+
+</head>
+
+<body>
+<center>
+
+<div class="container">
+
+	<div class="card" id="d1" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d2" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d3" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d4" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d5" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d6" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d7" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d8" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d9" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d10" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d11" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d12" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d13" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d14" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d15" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+	<div class="card" id="d16" onclick="fn(this.id)">
+		<img class="image" />
+	</div>
+
+</div>
+</center>
+<script type="text/javascript">
+
+	let c=0,prev=null,clicked=false,n=0,moves=0;
+
+	//image sources
+
+	let fruits=[
+	"./images/blueb.png","./images/pine.png","./images/kiwi.png","./images/pear.png","./images/banana.png","./images/apple.png",
+	"./images/melon.png","./images/grapes.png","./images/blueb.png","./images/pine.png","./images/kiwi.png","./images/pear.png",
+	"./images/banana.png","./images/apple.png","./images/melon.png","./images/grapes.png"];
+
+	//randomizing images
+
+	fruits=fruits.sort(()=>Math.random()-0.5);
+
+	const img=document.getElementsByClassName("image");
+	
+	for(let x=0;x<16;x++)
+		{
+			img[x].src=fruits[x];
+			img[x].id=""+x;
+		}
+
+
+	//func for complete operation
+
+	function fn(e) {
+	
+		if(clicked || e=="hi" || (prev!=null && prev.id==e && c==1))
+			return;
+	
+		c+=1;
+	
+		if(c==2)
+			clicked=true;
+
+		current=document.getElementById(e);
+
+
+		current.style.transform="rotateY(-180deg)";
+		current.style.transition="transform 0.6s linear";
+
+		//timeout for displaying image while rotation
+
+		let id = setTimeout(
+			function()
+			{
+				current.children[0].style.display="inline-block";
+		        return(clearTimeout(id));
+			}
+			,300);
+
+		//to do operations after selecting 2 images
+
+		if(c==2)
+		{
+			c%=2;
+			moves+=1;
+
+			//for wrong selection
+
+			if(fruits[Number(current.children[0].id)]!=fruits[Number(prev.children[0].id)])
+			{
+				
+				let id5 = setTimeout(
+					function()
+					{
+						current.style.background="red";
+						prev.style.background="red";
+				        return(clearTimeout(id5));
+					}
+					,800);
+
+			}
+			
+			//for right selection
+
+			else
+			{
+				let id5 = setTimeout(
+					function()
+					{
+						current.style.background="#39ff14";
+						prev.style.background="#39ff14";
+						current.id="hi";
+						prev.id="hi";
+				        return(clearTimeout(id5));
+					}
+					,800);
+			}
+
+			//for reverse flip and result displaying
+
+			let id1 = setTimeout(
+				function()
+				{
+
+					let id2 = setTimeout(
+					function()
+					{
+						prev.style.transform="rotateY(0deg)";
+						prev.style.transition="transform 0.6s linear";
+
+						let id4 = setTimeout(
+							function()
+							{
+								
+								prev.children[0].style.display="none";
+								clicked=false;
+						
+								if(current.id!="hi")
+								{
+								current.style.background="white";
+								prev.style.background="white";
+								}
+								else
+									n+=1;
+						
+								if(n==8)
+								{
+								let id6 = setTimeout(
+						
+								function()
+								{
+									let memory="Average";
+									if(moves<=15)
+										memory="Good";
+									document.write("<center><br><br><h1 style='font-size:40px;'>Game Over!<br><br><br> Moves : "+moves+"<br><br><br> Memory : "+memory+"</h1></center>");
+									return(clearTimeout(id6));
+								},500);
+						
+								}
+						
+						        return(clearTimeout(id4));
+							}
+							,300);
+
+
+						current.style.transform="rotateY(0deg)";
+						current.style.transition="transform 0.6s linear";
+
+						let id3 = setTimeout(
+							function()
+							{
+								current.children[0].style.display="none";
+						        return(clearTimeout(id3));
+							}
+							,300);
+
+				        return(clearTimeout(id2));
+					}
+					,300);
+
+			        return(clearTimeout(id1));
+				}
+				,1000);
+
+		}
+		else
+			prev=current;
+	}
+</script>
+
+</body>
+</html>
